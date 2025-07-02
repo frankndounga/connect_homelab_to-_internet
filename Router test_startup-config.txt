@@ -1,0 +1,92 @@
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname router-test
+!
+!
+!
+enable secret 5 $1$mERr$PCDg7bZ4RLd1b2hmGvkHy1
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+username cisco secret 5 $1$mERr$9m.EtBpZIv57vCf/UT3Du/
+!
+!
+license udi pid CISCO1941/K9 sn FTX1524MK7T-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address 192.168.0.20 255.255.255.0
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 172.16.0.2 255.255.255.252
+ ip nat inside
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ network 172.16.0.0 0.0.0.3 area 0
+!
+ip nat inside source list 1 interface GigabitEthernet0/0 overload
+ip classless
+ip route 0.0.0.0 0.0.0.0 192.168.0.1 
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 172.16.0.0 0.0.0.3
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 permit 192.168.20.0 0.0.0.255
+access-list 1 permit 192.168.30.0 0.0.0.255
+!
+!
+!
+!
+!
+line con 0
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
+
